@@ -18,7 +18,8 @@ from scipy.fftpack import fft,ifft,fftshift      # fast Fourier transforms
  
 # set x-axis scale
 N = 2**13    # choice suitable for fft
-dx = 0.1
+N = N*10
+dx = 0.01
 L = N*dx
 x = dx*(np.arange(N)-0.5*N)
 
@@ -30,7 +31,7 @@ k = -N*dk/2 + dk*np.arange(N)
 t = 0.0                         # start time
 dt = 0.01                       # time step
 tmax = 100.                    # max time
-nsteps = 50                     # number of time steps between frame updates
+nsteps = 50                   # number of time steps between frame updates
 frames = int(tmax/(nsteps*dt))
 
 # parameters for potential barrier
@@ -70,7 +71,7 @@ def theta(x):    # Heaviside function
 ######################################################################
 def potential(x):   # potential that can be selected to be any function
     pot = 0*x        # free particle
-    #pot[x > 0] = 100. # potential wall 
+    pot[x > 0] = 100. # potential wall 
     #pot = V0*theta(x)  # potential step
     #pot = V0*(theta(x+w/2.0)-theta(x-w/2.0))  # square barrier
     #pot = V0*theta(x-1)/(x+1.e-10)  # Gamow Coulomb barrier
@@ -129,14 +130,15 @@ anim = animation.FuncAnimation(fig, animate, init_func=init,
 plt.show()
 
 # Save final frame
-#fig = plt.figure(figsize=(12,8),dpi=80)
-#plt.xlim(-100,100)
-#plt.ylim(0,0.1)
-#plt.plot(x, abs(psi)**2, c='b', lw=4)
-#plt.plot(x, abs(psix)**2, c='r', linestyle='dashed', lw=4)
-#plt.plot(x, 0.05*pot, c='black', lw=6) 
-#plt.savefig('./fig.pdf', bbox_inches='tight')
-#plt.show()
+fig = plt.figure(figsize=(12,8),dpi=80)
+plt.xlim(-100,100)
+plt.ylim(0,0.1)
+plt.plot(x, abs(psi)**2, c='b', lw=4)
+plt.plot(x, abs(psix)**2, c='r', linestyle='dashed', lw=4)
+plt.plot(x, 0.05*pot, c='black', lw=6) 
+plt.savefig('./fig.pdf', bbox_inches='tight')
+plt.title(f"dt = {dt}, dx = {dx}", fontsize = 20)
+plt.show()
 
 # calculate T and R for final state
 T=np.sum(abs(psi[N//2:N])**2)

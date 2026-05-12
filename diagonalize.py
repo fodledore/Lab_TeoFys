@@ -8,7 +8,7 @@ import numpy as np
 from numpy import linalg as LA
 from matplotlib import pyplot as plt
 
-dim = 10 # truncated dimension of Hilbert space
+dim = 40 #truncated dimension of Hilbert space
 
 def delta(m,n):
     d = 0
@@ -29,10 +29,12 @@ for i in range(dim):
         p[i,j] = pm(i,j)
 x2 = x.dot(x)
 p2 = p.dot(p)
-#x4 = x2.dot(x2) # quartic term
+x4 = x2.dot(x2) # quartic term
+
+energies_anharmonic = [0.8037706329125616, 2.737892143223948, 5.179291278608553, 7.942403043192827]
 
 # Harmonic Hamiltonian
-H = p2/2+x2/2
+H = p2/2+x2/2+x4
 E = LA.eigvalsh(H)
 #print('E=',E[:10])
 n = np.arange(dim)
@@ -44,11 +46,12 @@ Eexact = n+1/2
 nmax = 10
 if nmax>dim: nmax = dim
 n = np.arange(dim)
-plt.plot(n[:nmax], E[:nmax], 'r.-')
-plt.plot(n[:nmax], Eexact[:nmax], 'b.')
+plt.plot(n[:nmax], E[:nmax], 'r.-', label = "Diagonalisering")
+plt.plot([0, 1, 2, 3], energies_anharmonic, 'o', label = "Intervallhalvering")
+
+#plt.plot(n[:nmax], Eexact[:nmax], 'b.')
 plt.xlabel('$n$',fontsize=15)
 plt.ylabel('$E_n$',fontsize=15)
 #plt.savefig('eigenvalues.pdf')
+plt.legend()
 plt.show()
-
-
