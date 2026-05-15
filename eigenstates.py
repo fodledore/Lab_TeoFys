@@ -31,26 +31,26 @@ dx2=dx**2          # step length squared
 c=2.0   # constant in Schrödinger equation
 
 # input energy guess
-EeV = 0.5    # input energy in eV: test 0.3 , 0.4 , 0.3760 , 1.5
+EeV = 3/2    # input energy in eV: test 0.3 , 0.4 , 0.3760 , 1.5
 E = EeV         # input energy in J
 
 # potential energy function
 def V(x):
     #y = 0.0
-    #y = x**2/2 # harmonic oscillator
-    y = x**2/2 + x**4 # anharmonic oscillator
+    y = x**2/2 # harmonic oscillator
+    #y = x**2/2 + x**4 # anharmonic oscillator
     return y
 
 # initial values and lists
 x = 0               # initial value of position x
 
 # even solution
-# psi = 1.0           # wave function at initial position
-#dpsi = 0.0          # derivative of wave function at initial position
+psi = 1.0           # wave function at initial position
+dpsi = 0.0          # derivative of wave function at initial position
 
 # odd solution
-psi = 0.0           # wave function at initial position
-dpsi = 1.0          # derivative of wave function at initial position
+#psi = 0.0           # wave function at initial position
+#dpsi = 1.0          # derivative of wave function at initial position
 
 x_tab = []          # list to store positions for plot
 psi_tab = []        # list to store wave function for plot
@@ -94,13 +94,13 @@ tol = 1e-15
 a = 7
 b = 9
 k = (a+b)/2
-while b-a > tol:
-    k = (a+b)/2
-    if psi_funcdimensionlessnotab(x, psi, dpsi, N, a)*psi_funcdimensionlessnotab(x, psi, dpsi, N, k) < 0:
-        b = k
-    else:
-        a = k
-E = k
+#while b-a > tol:
+#    k = (a+b)/2
+#    if psi_funcdimensionlessnotab(x, psi, dpsi, N, a)*psi_funcdimensionlessnotab(x, psi, dpsi, N, k) < 0:
+#        b = k
+#    else:
+#        a = k
+#E = k
 
 print(E)
 # even solution
@@ -108,8 +108,8 @@ psi = 1.0           # wave function at initial position
 dpsi = 0.0          # derivative of wave function at initial position
 
 # odd solution
-psi = 0.0           # wave function at initial position
-dpsi = 1.0          # derivative of wave function at initial position
+#psi = 0.0           # wave function at initial position
+#dpsi = 1.0          # derivative of wave function at initial position
 
 psi_funcdimensionless(x, psi, dpsi, x_tab, psi_tab, N, E)
 error = [abs(-4.1123448030195087e-16), abs(-4.112334578280044e-18), abs(-4.112360603514437e-20), abs(-4.0767182960900843e-22), 1.745686970478366e-23, ]
@@ -135,7 +135,7 @@ plt.close()
 #plt.legend()
 plt.plot(x_tab, psi_tab, linewidth=2)
 plt.xlim(0, 2.5)
-plt.ylim(-0.5, 0.5)
+plt.ylim(-2, 2)
 plt.xlabel('x',fontsize=15)
 plt.ylabel('$\psi$',fontsize=15)
 plt.savefig('psi.pdf')

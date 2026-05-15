@@ -12,14 +12,15 @@ MW version 250402
 """
 
 import numpy as np
+import math
 from matplotlib import pyplot as plt
 from matplotlib import animation
 from scipy.fftpack import fft,ifft,fftshift      # fast Fourier transforms
  
 # set x-axis scale
 N = 2**13    # choice suitable for fft
-N = N*10
-dx = 0.01
+N = N
+dx = 0.1
 L = N*dx
 x = dx*(np.arange(N)-0.5*N)
 
@@ -30,13 +31,13 @@ k = -N*dk/2 + dk*np.arange(N)
 # time parameters  
 t = 0.0                         # start time
 dt = 0.01                       # time step
-tmax = 100.                    # max time
-nsteps = 50                   # number of time steps between frame updates
+tmax = 130.                    # max time
+nsteps = 50                # number of time steps between frame updates
 frames = int(tmax/(nsteps*dt))
 
 # parameters for potential barrier
 w = 2.0                         # width of potential
-V0 = 1.0                        # height of potential
+V0 = 1                        # height of potential
 
 # quantum parameters
 hbar = 1.0
@@ -45,8 +46,13 @@ m = 1.0
 
 # parameters for the initial gaussian wave packet
 a = 8.0                         # width of gaussian
-x0 = -100.0                     # initial center position
-E = 1.0                         # energy
+x0 = -20.0    # initial center position
+E_vals1 = [0.15, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.99]    
+T_vals1 = [0.013570327113685013, 0.16545611410361227, 0.3463499408208235, 0.5221585183876235, 0.6592080559321328, 0.7554558766360663, 0.820712889513107, 0.865019840986689, 0.8930795665112318]  
+
+E_vals2 = [0.15, 0.175, 0.20, 0.22, 0.25, 0.30, 0.40, 0.7, 0.8, 0.9]
+T_vals2 = [0.013570327113685013, 0.02513576715756535, 0.04196805224124321, 0.059565355621495265, 0.09297938031446362, 0.16545611410361227, 0.3463499408208235, 0.7554558766360663, 0.820712889513107, 0.865019840986689]
+E = 0.25            # energy
 k0 = np.sqrt(2*m*E)/hbar        # wavevector of wavepacket motion
 print('k0,E=',k0,E) 
 
@@ -74,7 +80,7 @@ def potential(x):   # potential that can be selected to be any function
     pot[x > 0] = 100. # potential wall 
     #pot = V0*theta(x)  # potential step
     #pot = V0*(theta(x+w/2.0)-theta(x-w/2.0))  # square barrier
-    #pot = V0*theta(x-1)/(x+1.e-10)  # Gamow Coulomb barrier
+    pot = V0*theta(x-1)/(x+1.e-10)  # Gamow Coulomb barrier
     return pot      
 ######################################################################
 
@@ -133,12 +139,12 @@ plt.show()
 fig = plt.figure(figsize=(12,8),dpi=80)
 plt.xlim(-100,100)
 plt.ylim(0,0.1)
-plt.plot(x, abs(psi)**2, c='b', lw=4)
+plt.plot(x, abs(psi)**2, c='b', lw=1)
 plt.plot(x, abs(psix)**2, c='r', linestyle='dashed', lw=4)
 plt.plot(x, 0.05*pot, c='black', lw=6) 
 plt.savefig('./fig.pdf', bbox_inches='tight')
 plt.title(f"dt = {dt}, dx = {dx}", fontsize = 20)
-plt.show()
+#plt.show()
 
 # calculate T and R for final state
 T=np.sum(abs(psi[N//2:N])**2)
@@ -148,6 +154,7 @@ A=T+R
 T/=A
 R/=A
 print('T,R=',T,R)
+
 
 
 
